@@ -1,0 +1,11 @@
+{
+  "manifest_version": 2,
+  "name": "Righelli",
+  "description": "Extends the dev tools with awesome rulers.",
+  "version": "0.1",
+  "devtools_page": "righelli-devtools.html",
+  "background": {
+    "scripts": ["righelli-background.js"]
+  },
+  "permissions": ["tabs", "<all_urls>"]
+}

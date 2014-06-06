@@ -1,0 +1,89 @@
+/*
+    This file is part of Righelli.
+
+    Righelli is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Righelli is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Righelli.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+div.source,
+div.ruler,
+div.highlightsurface {
+    z-index: 9999;
+}
+
+div.highlightsurface {
+    position: fixed;
+    background-color: rgba(255, 0, 0, 0.5);
+    visibility: hidden;
+}
+
+div.highlightsurfaceLocationInfo {
+    position: absolute;
+    height: 15px;
+    margin: auto;
+    color: blue;
+    background-color: yellow;
+    font-size: 12px;
+}
+
+div.source {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: red;
+}
+
+div.verticalSource {
+    width: 15px;
+    height: 100%;
+
+}
+
+div.horizontalSource {
+    width: 100%;
+    height: 15px;
+}
+
+div.ruler {
+    position: fixed;
+    background-color: transparent;
+}
+
+div.realRuler {
+    position: absolute;
+    background-color: red;
+}
+
+div.verticalRuler > div.realRuler {
+    left: 50%;
+    width: 1px;
+    height: 100%;
+}
+
+div.horizontalRuler > div.realRuler {
+    top: 50%;
+    width: 100%;
+    height: 1px;
+}
+
+div.verticalRuler {
+    left: 0px;
+    top: 0px;
+    width: 10px;
+    height: 100%;
+}
+
+div.horizontalRuler {
+    height: 10px;
+    width: 100%;
+}
