@@ -16,24 +16,40 @@
 */
 
 div.source,
-div.ruler,
-div.highlightsurface {
+div.ruler {
     z-index: 9999;
 }
 
 div.highlightsurface {
     position: fixed;
+    z-index: 10000;
     background-color: rgba(255, 0, 0, 0.5);
     visibility: hidden;
 }
 
 div.highlightsurfaceLocationInfo {
     position: absolute;
-    height: 15px;
+    min-width: 90px;
+
     margin: auto;
-    color: blue;
+    color: black;
     background-color: yellow;
     font-size: 12px;
+    text-align: center;
+    display: table-cell;
+}
+
+div.highlightsurfaceLocationInfo > span {
+    vertical-align: middle;
+}
+
+span.highlightsurfaceLocationInfoValue {
+    color: black;
+}
+
+span.highlightsurfaceLocationInfoMultSign,
+span.highlightsurfaceLocationInfoUnit {
+    color: gray;
 }
 
 div.source {

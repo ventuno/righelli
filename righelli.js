@@ -158,7 +158,8 @@ righelli.prototype = {
         this._oHighlightSurface.css("right", (iHightlightRight-righelli.CLICKABLE_AREA_SIZE_2)+"px");
         this._oHighlightSurface.css("bottom", (iHightlightBottom-righelli.CLICKABLE_AREA_SIZE_2)+"px");
         this._oHighlightSurface.css("visibility", "visible");
-        this._oHighlightSurface.find(".highlightsurfaceLocationInfo").text(this._oHighlightSurface.width() + "px x " + this._oHighlightSurface.height() + "px");
+        //this._oHighlightSurface.find(".highlightsurfaceLocationInfo").text(this._oHighlightSurface.width() + "px x " + this._oHighlightSurface.height() + "px");
+        this.setHighlightSurfaceLocationInfoValues(this._oHighlightSurface.width(), this._oHighlightSurface.height(), "px");
     },
 
 //Listeners
@@ -236,9 +237,32 @@ righelli.prototype = {
         oDiv.addClass("highlightsurface");
         var oLocationDiv = $('<div/>');
         oLocationDiv.addClass("highlightsurfaceLocationInfo");
+        this.addHighlightSurfaceLocationInfoValue(oLocationDiv);
+        var oMultSignSpan = $('<span> &times; </span>');
+        oMultSignSpan.addClass("highlightsurfaceLocationInfoMultSign");
+        oLocationDiv.append(oMultSignSpan);
+        this.addHighlightSurfaceLocationInfoValue(oLocationDiv);
         oDiv.append(oLocationDiv);
         this._oBody.append(oDiv);
         return oDiv;
+    },
+
+    addHighlightSurfaceLocationInfoValue: function (oDiv) {
+        var oLocationSpanInfoValue = $('<span/>');
+        oLocationSpanInfoValue.addClass("highlightsurfaceLocationInfoValue");
+        var oLocationSpanInfoUnit = $('<span/>');
+        oLocationSpanInfoUnit.addClass("highlightsurfaceLocationInfoUnit");
+        oDiv.append(oLocationSpanInfoValue);
+        oDiv.append(oLocationSpanInfoUnit);
+    },
+
+    setHighlightSurfaceLocationInfoValues: function (iValue1, iValue2, sUnit) {
+        var aHighlightsurfaceLocationInfoValues = this._oHighlightSurface.find(".highlightsurfaceLocationInfoValue");
+        $(aHighlightsurfaceLocationInfoValues[0]).text(iValue1);
+        $(aHighlightsurfaceLocationInfoValues[1]).text(iValue2);
+        var aHighlightsurfaceLocationInfoUnits = this._oHighlightSurface.find(".highlightsurfaceLocationInfoUnit");
+        $(aHighlightsurfaceLocationInfoUnits[0]).text(sUnit);
+        $(aHighlightsurfaceLocationInfoUnits[1]).text(sUnit);
     },
 
 //Ruler source
