@@ -15,18 +15,14 @@
     along with Righelli.  If not, see <http://www.gnu.org/licenses/>.
 */
 // Background page -- righelli-background.js
-var openCount = 0;
 chrome.runtime.onConnect.addListener(function (port) {
     if (port.name == "devtools-righelli") {
-        openCount++;
         port.onDisconnect.addListener(function(port) {
-            openCount--;
-            if (openCount == 0) {
+            //if (openCount == 0) {
               chrome.tabs.query({active: true, currentWindow: true},
               function(tabs) {
                   chrome.tabs.sendMessage(tabs[0].id, {cmd: "exit"});
               });
-            }
         });
     }
 });
@@ -35,12 +31,14 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
     if (message.cmd == "init") {
         chrome.tabs.query({active: true, currentWindow: true},
         function(tabs) {
+            console.log("tabs", tabs)
             chrome.tabs.sendMessage(tabs[0].id, {cmd: "init"},
             function (response) {
                 if (!response) { //the script hasn't been previously loaded, let's do it now
                     chrome.tabs.insertCSS(message.tabId, {file: "righelli.css"});
                     chrome.tabs.executeScript(message.tabId, {file: "jquery.min.js"});
                     chrome.tabs.executeScript(message.tabId, {file: "righelli.js" });
+                    return;
                 }
             });
         });
