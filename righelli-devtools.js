@@ -16,11 +16,14 @@
 */
 // Run our righelli generation script as soon as the document's DOM is ready.
 document.addEventListener('DOMContentLoaded', function () {
-    chrome.devtools.panels.create("Righelli", null /*icon*/, "righelli-panel.html",
+    chrome.devtools.panels.create(chrome.i18n.getMessage("application_title"), null /*icon*/, "righelli-panel.html",
     function(panel) {
          // code invoked on panel creation
+         panel.onShown.addListener(function () {
+            chrome.runtime.sendMessage({cmd: "init", opt: "ignore_settings", tabId: chrome.devtools.inspectedWindow.tabId});
+         })
+         //panel.createStatusBarButton("icon128.png", "tittòl", false);
     });
-
     chrome.runtime.connect({name: "devtools-righelli"}); //used to count the number of open open tabs to generate the exit event.
-    chrome.runtime.sendMessage({cmd: "init"});
+    chrome.runtime.sendMessage({cmd: "init", tabId: chrome.devtools.inspectedWindow.tabId});
 });

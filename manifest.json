@@ -1,11 +1,13 @@
 {
   "manifest_version": 2,
-  "name": "Righelli",
-  "description": "Extends the dev tools with awesome rulers.",
+  "name": "__MSG_application_title__",
+  "description": "__MSG_application_description__",
+  "default_locale": "en",
   "version": "0.1",
   "devtools_page": "righelli-devtools.html",
   "background": {
     "scripts": ["righelli-background.js"]
   },
-  "permissions": ["tabs", "<all_urls>"]
+  "options_page": "righelli-options.html",
+  "permissions": ["tabs", "<all_urls>", "storage"]
 }

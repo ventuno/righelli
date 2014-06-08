@@ -26,6 +26,7 @@ righelli.CLICKABLE_AREA_SIZE_2 = righelli.CLICKABLE_AREA_SIZE/2;
 
 righelli.prototype = {
     init : function () {
+        //alert("initing righelli! -- content script")
         this._oBody = $("body");
 
         this._oVerticalRulerSource = this.createRulerSource(righelli.VERTICAL);
@@ -44,9 +45,13 @@ righelli.prototype = {
         $(document).bind("keydown", "ctrl", $.proxy(this._onKeyDown, this));
         $(document).bind("keyup", "ctrl", $.proxy(this._onKeyUp, this));
         document.addEventListener("contextmenu", $.proxy(this._onContextMenu, this));
+        window.addEventListener("unload", $.proxy(this._onUnload, this));
+
+        this._bIsInited = true;
     },
 
     exit : function () {
+        this._bIsInited = false;
         this._oBody = null;
 
         if (this._oVerticalRulerSource) {
@@ -77,6 +82,11 @@ righelli.prototype = {
         $(document).unbind("keydown", $.proxy(this._onKeyDown, this));
         $(document).unbind("keyup", $.proxy(this._onKeyUp, this));
         document.removeEventListener("contextmenu", $.proxy(this._onContextMenu, this));
+        window.removeEventListener("unload", $.proxy(this._onUnload, this));
+    },
+
+    isInited: function () {
+        return this._bIsInited;
     },
 
     _indexOf: function (aArray, oRuler) {
@@ -231,6 +241,10 @@ righelli.prototype = {
         }
     },
 
+    _onUnload: function (oEvent) {
+        this.exit();
+    },
+
 //Highlight surface
     createHighlightSurface: function () {
         var oDiv = $('<div/>');
@@ -347,8 +361,10 @@ righelli.prototype = {
 var r = new righelli();
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
     if (message.cmd == "init") {
-        r.init();
-        sendResponse({});
+        if (!r.isInited()) {
+            r.init();
+            sendResponse({});
+        }
     } else if (message.cmd == "exit") {
         r.exit();
         //r = null;

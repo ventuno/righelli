@@ -1,0 +1,26 @@
+{
+  "application_title": {
+    "message": "Righelli",
+    "description": "The title of the application, displayed in the web store."
+  },
+  "application_description": {
+    "message": "Extends the dev tools with awesome rulers.",
+    "description": "The description of the application, displayed in the web store."
+  },
+  "settings_page_title": {
+    "message": "Settings",
+    "description": "The title of the Options page."
+  },
+  "settings_startup_option": {
+    "message": "Show rulers when DevTools are open.",
+    "description": "Options to enable/disable Righelli when the user launches the DevTools."
+  },
+  "settings_save_button": {
+    "message": "Save",
+    "description": "Button to save the options."
+  },
+  "settings_saved_message": {
+    "message": "Options saved.",
+    "description": "Message to display when options are succesfully saved.s"
+  }
+}

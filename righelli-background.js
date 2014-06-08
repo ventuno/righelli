@@ -14,33 +14,56 @@
     You should have received a copy of the GNU General Public License
     along with Righelli.  If not, see <http://www.gnu.org/licenses/>.
 */
-// Background page -- righelli-background.js
-chrome.runtime.onConnect.addListener(function (port) {
-    if (port.name == "devtools-righelli") {
-        port.onDisconnect.addListener(function(port) {
-            //if (openCount == 0) {
-              chrome.tabs.query({active: true, currentWindow: true},
-              function(tabs) {
-                  chrome.tabs.sendMessage(tabs[0].id, {cmd: "exit"});
-              });
-        });
-    }
-});
 
-chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+var righelliBackground = {};
+
+righelliBackground.connectListener = function (port) {
+    if (port.name == "devtools-righelli") {
+        port.onDisconnect.addListener(righelliBackground.disconnectListener);
+    }
+};
+
+righelliBackground.disconnectListener = function(port) {
+    righelliBackground.sendCmdToContentScript("exit");
+};
+
+righelliBackground.loadRighelli = function(iTabId) {
+    righelliBackground.sendCmdToContentScript("init", function (response) {
+        if (!response) { //the script hasn't been previously loaded, let's do it now
+            chrome.tabs.insertCSS(iTabId, {file: "righelli.css"});
+            chrome.tabs.executeScript(iTabId, {file: "jquery.min.js"});
+            chrome.tabs.executeScript(iTabId, {file: "righelli.js" });
+        }
+    });
+};
+
+righelliBackground.messageListener = function(message,sender,sendResponse){
     if (message.cmd == "init") {
-        chrome.tabs.query({active: true, currentWindow: true},
-        function(tabs) {
-            console.log("tabs", tabs)
-            chrome.tabs.sendMessage(tabs[0].id, {cmd: "init"},
-            function (response) {
-                if (!response) { //the script hasn't been previously loaded, let's do it now
-                    chrome.tabs.insertCSS(message.tabId, {file: "righelli.css"});
-                    chrome.tabs.executeScript(message.tabId, {file: "jquery.min.js"});
-                    chrome.tabs.executeScript(message.tabId, {file: "righelli.js" });
-                    return;
+        if (message.cmd == "init" && message.opt == "ignore_settings") {
+            righelliBackground.loadRighelli(message.tabId);
+        } else {
+            chrome.storage.sync.get({
+                showAtStartup: false
+            }, function(oSettings) {
+                if (oSettings.showAtStartup) {
+                    righelliBackground.loadRighelli(message.tabId);
                 }
             });
-        });
+        }
     }
-});
+};
+
+righelliBackground.sendMessageToContentScript = function (oMsg, fnCallback) {
+    chrome.tabs.query({active: true, currentWindow: true},
+        function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, oMsg, fnCallback);
+    });
+};
+
+righelliBackground.sendCmdToContentScript = function (sCmd, fnCallback) {
+    righelliBackground.sendMessageToContentScript({cmd: sCmd}, fnCallback);
+};
+
+//Setup listeners
+chrome.runtime.onConnect.addListener(righelliBackground.connectListener);
+chrome.runtime.onMessage.addListener(righelliBackground.messageListener);
